@@ -1,0 +1,43 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "txt/**",
+      "Design.md",
+      "firebase-debug.log",
+      "firebase-debug.*.log"
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow, noarchive"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|png|webp|svg|gif)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=600"
+          }
+        ]
+      }
+    ]
+  }
+}

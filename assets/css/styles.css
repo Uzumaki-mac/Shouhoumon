@@ -34,7 +34,7 @@ body {
   background:
     radial-gradient(circle at 12% 8%, rgba(230, 186, 122, 0.08), transparent 30rem),
     radial-gradient(circle at 86% 34%, rgba(220, 197, 187, 0.1), transparent 28rem),
-    linear-gradient(180deg, #fffdf9 0%, var(--color-off-white) 48%, #fffdf9 100%);
+    linear-gradient(180deg, rgba(255, 253, 249, 0.72) 0%, rgba(250, 247, 242, 0.56) 48%, rgba(255, 253, 249, 0.72) 100%);
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.9;
@@ -66,9 +66,9 @@ body::before {
   pointer-events: none;
   content: "";
   background:
-    linear-gradient(180deg, rgba(255, 253, 249, 0.9), rgba(255, 253, 249, 0.82)),
-    url("../images/photos/marble-crystal-wide.png") center center / cover no-repeat;
-  opacity: 0.72;
+    linear-gradient(180deg, rgba(255, 253, 249, 0.52), rgba(255, 253, 249, 0.36)),
+    url("../images/photos/footer-marble.png") center center / cover no-repeat;
+  opacity: 0.94;
 }
 
 img {
@@ -594,7 +594,7 @@ button {
 
 .method-strip {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: clamp(14px, 2vw, 26px);
   align-items: end;
 }
@@ -733,7 +733,7 @@ button {
   overflow: hidden;
   text-align: center;
   background:
-    linear-gradient(180deg, rgba(250, 247, 242, 0.82), rgba(250, 247, 242, 0.96)),
+    linear-gradient(180deg, rgba(250, 247, 242, 0.58), rgba(250, 247, 242, 0.82)),
     url("../images/photos/marble-crystal-wide.png") center right / cover no-repeat;
 }
 
@@ -1145,6 +1145,8 @@ button {
 
 .route-card {
   position: relative;
+  display: grid;
+  align-content: start;
   min-height: 100%;
   padding: clamp(28px, 4vw, 42px);
   overflow: hidden;
@@ -1164,18 +1166,13 @@ button {
 }
 
 .route-card__number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 54px;
-  height: 32px;
+  display: inline-block;
   margin-bottom: 18px;
-  color: #fff;
-  background: var(--color-gold);
-  border-radius: 999px;
+  color: var(--color-dark-gold);
   font-family: var(--font-serif);
-  font-size: 0.86rem;
-  letter-spacing: 0.08em;
+  font-size: 1.18rem;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .route-card h2 {
@@ -1209,6 +1206,16 @@ button {
 
 .route-card__image img {
   width: 100%;
+}
+
+@media (min-width: 901px) {
+  .route-card h2 {
+    min-height: 3.3em;
+  }
+
+  .route-card > p:first-of-type {
+    min-height: 4.1em;
+  }
 }
 
 .timeline {
@@ -1442,6 +1449,20 @@ button {
   font-size: 0.86rem;
 }
 
+.site-footer__social {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.site-footer__social img {
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
 .back-to-top {
   position: fixed;
   right: 24px;
@@ -1495,10 +1516,6 @@ button {
     font-size: 0.82rem;
   }
 
-  .site-header__cta {
-    display: none;
-  }
-
   .method-strip {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -1520,6 +1537,10 @@ button {
 
   .nav-toggle {
     display: block;
+  }
+
+  .site-header__cta {
+    display: none;
   }
 
   .site-nav {
@@ -1799,6 +1820,10 @@ button {
 
   .site-footer__bottom {
     display: grid;
+  }
+
+  .site-footer__social {
+    justify-self: start;
   }
 
   .back-to-top {
