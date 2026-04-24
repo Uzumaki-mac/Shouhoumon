@@ -1166,18 +1166,16 @@ button {
 }
 
 .route-card__number {
-  display: inline-grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
   color: #fff;
   background: var(--color-gold);
   border-radius: 50%;
-  box-shadow: 0 10px 24px rgba(193, 154, 102, 0.18);
   font-family: var(--font-serif);
-  font-size: 1.55rem;
-  line-height: 1;
   letter-spacing: 0;
 }
 
