@@ -1166,11 +1166,17 @@ button {
 }
 
 .route-card__number {
-  display: inline-block;
-  margin-bottom: 18px;
-  color: var(--color-dark-gold);
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 22px;
+  color: #fff;
+  background: var(--color-gold);
+  border-radius: 50%;
+  box-shadow: 0 10px 24px rgba(193, 154, 102, 0.18);
   font-family: var(--font-serif);
-  font-size: 1.18rem;
+  font-size: 1.55rem;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -1300,6 +1306,16 @@ button {
   border-radius: 16px;
   outline: 0;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.form-field select {
+  padding-right: 3.4rem;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='12' viewBox='0 0 18 12' fill='none'%3E%3Cpath d='M3 3.5L9 9L15 3.5' stroke='%236b6159' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.15rem center;
+  background-size: 18px 12px;
 }
 
 .form-field textarea {
