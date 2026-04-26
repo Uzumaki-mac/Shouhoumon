@@ -10,6 +10,7 @@
 - **HTML / CSS / JavaScript** のみ（ビルドツール・フレームワーク不使用）
 - **Firebase Hosting** でホスティング（プロジェクトID: `shouhoumon-20260424-214632`）
 - **Google Fonts**: Noto Serif JP（見出し）+ Noto Sans JP（本文）
+- **GitHub**: https://github.com/Uzumaki-mac/Shouhoumon
 - ブランチ: `main` のみ
 
 ### デプロイ
