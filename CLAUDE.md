@@ -31,22 +31,33 @@ firebase hosting:channel:deploy preview
 
 ```
 /
-├── index.html          # トップページ
-├── profile.html        # プロフィール
-├── art.html            # 占術紹介
-├── kantei.html         # 鑑定について（料金・免責）
-├── reserve.html        # 鑑定申込みフォーム
-├── access.html         # アクセス
+├── index.html              # トップページ
+├── profile.html            # プロフィール
+├── art.html                # 占術紹介
+├── kantei.html             # 鑑定について（料金・免責）
+├── reserve.html            # 鑑定申込みフォーム
+├── access.html             # アクセス（刈谷市）
+├── beginner.html           # はじめての方へ
+├── blog.html               # ブログ一覧
+├── privacy.html            # 個人情報の取り扱い
+├── kouza.html              # 占術講座 一覧
+├── kouza-contact.html      # 講座 お問い合わせ
+├── kouza-rikujin.html      # 六壬講座
+├── kouza-shichusuimei.html # 四柱推命講座
+├── kouza-tarot.html        # タロット講座
 ├── assets/
-│   ├── css/styles.css  # 単一スタイルシート（CSS変数でトークン管理）
-│   ├── js/main.js      # ヘッダー / スクロール / reveal アニメ / フォーム
+│   ├── css/styles.css      # 単一スタイルシート（CSS変数でトークン管理）
+│   ├── js/main.js          # ヘッダー / スクロール / reveal アニメ / フォーム
 │   └── images/
-│       ├── photos/     # 写真（hero-tarot-candle-wide.png 等）
+│       ├── photos/         # 写真（hero-tarot-candle-wide.png 等）
 │       ├── illustrations/
-│       │   └── icons/  # 占術アイコン（icon-shichu-suimei.png 等）
-│       └── social/     # SNSロゴ
-├── Design.md           # デザイン仕様書（カラー・タイポ・コピー全記載）
-└── firebase.json       # Hosting 設定（noindex ヘッダー等）
+│       │   └── icons/      # 占術アイコン（icon-*.png 各占術分）
+│       ├── courses/        # 講座ページ用ビジュアル
+│       ├── access/         # アクセスページ用写真
+│       ├── social/         # SNSロゴ（instagram.png / line.png）
+│       └── references/     # 参照用（デザインシステム・サイト参照）
+├── Design.md               # デザイン仕様書（カラー・タイポ・コピー全記載）
+└── firebase.json           # Hosting 設定（noindex ヘッダー等）
 ```
 
 ---
@@ -78,11 +89,53 @@ firebase hosting:channel:deploy preview
 
 ---
 
+## 主要コンポーネント
+
+| クラス | 用途 |
+|---|---|
+| `.method-card` | 占術紹介カード（アイコン + 説明文） |
+| `.section-switcher` | ページ内タブナビ（例: 占術紹介 ↔ 講座案内） |
+| `.concern-guide` | お悩み別おすすめ占術の対応表 |
+| `.pillar-table` | 四柱推命の命式グリッド表示 |
+| `.kyusei-grid` | 九星術の魔方陣グリッド |
+| `.course-teaser` | 講座ページへの誘導バナー（画像 + テキスト） |
+| `.reveal` | スクロールフェードイン対象（JS で `.is-visible` を付与） |
+| `.soft-card` | 番号付きカード（ホームの3ステップ等） |
+| `.cta-band` | 幅広CTAバナー（各ページ末尾） |
+| `.notice-strip` | お知らせ帯（ホーム上部） |
+
+---
+
 ## アニメーション
 
-- `.reveal` クラスを付けた要素を `IntersectionObserver` で監視し、`.is-visible` を付与
+- `.reveal` クラスを付けた要素を `IntersectionObserver` で監視し `.is-visible` を付与
 - フェードイン (`opacity` + `translateY`) のみ。`0.6s ease`
-- JS非対応環境では `is-visible` を一括付与してフォールバック
+- JS非対応環境では `.is-visible` を一括付与してフォールバック
+
+---
+
+## SNS / 外部リンク
+
+| サービス | URL |
+|---|---|
+| Instagram | https://www.instagram.com/forever_field26 |
+| LINE公式 | https://lin.ee/yJiMHfJ |
+| Amebaブログ | https://ameblo.jp/lily-1410/ |
+| 著書（Amazon） | https://www.amazon.co.jp/dp/4906828248/ |
+
+外部リンクはすべて `target="_blank" rel="noopener noreferrer"` 必須。
+
+---
+
+## 占術別・お悩み対応表
+
+| お悩み | 対応占術 |
+|---|---|
+| 仕事・適職 | 四柱推命 / 紫微斗数 |
+| 結婚・相性 | 四柱推命 / タロット |
+| 今すぐの判断 | 六壬神課 / タロット |
+| 住まい・方位 | 風水 / 九星術 |
+| 人生全体の流れ | 四柱推命 / 紫微斗数 |
 
 ---
 
@@ -100,4 +153,4 @@ firebase hosting:channel:deploy preview
 
 - `firebase.json` で全ページに `X-Robots-Tag: noindex, nofollow, noarchive` を付与中（制作中のため）。本番公開時は削除すること
 - フォーム送信はモック状態（`main.js` の `bookingForm` ハンドラ）。公開前にバックエンド（メール送信等）を接続すること
-- 外部リンク（Amazon著書・Amebaブログ）は `target="_blank" rel="noopener noreferrer"` 必須
+- `index.html` のブログリンクが旧 Ameba URL のまま（他ページは `blog.html` に更新済み）。要確認
