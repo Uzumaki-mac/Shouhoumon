@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>鑑定申込み | 富永祥玲の鑑定室</title>
     <meta name="description" content="富永祥玲の鑑定室への鑑定申込みページ。お名前、生年月日、出生地、連絡先、ご相談内容をご入力ください。">
+    <link rel="canonical" href="reserve.html">
+    <meta property="og:title" content="鑑定申込み | 富永祥玲の鑑定室">
+    <meta property="og:description" content="お名前、生年月日、出生地、連絡先、ご相談内容をご入力ください。">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:site_name" content="富永祥玲の鑑定室">
+    <meta property="og:image" content="assets/images/photos/hero-tarot-candle-wide.png">
+    <meta property="og:image:alt" content="富永祥玲の鑑定室のイメージ">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="鑑定申込み | 富永祥玲の鑑定室">
+    <meta name="twitter:description" content="お名前、生年月日、出生地、連絡先、ご相談内容をご入力ください。">
+    <meta name="twitter:image" content="assets/images/photos/hero-tarot-candle-wide.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&amp;family=Noto+Serif+JP:wght@400;500;700&amp;display=swap" rel="stylesheet">
@@ -22,8 +34,9 @@
         <a href="profile.html">プロフィール</a>
         <a href="art.html">占術紹介</a>
         <a href="kantei.html">鑑定について</a>
-        <a href="https://ameblo.jp/lily-1410/" target="_blank" rel="noopener noreferrer">ブログ</a>
+        <a href="blog.html">ブログ</a>
         <a href="access.html">アクセス</a>
+        <a class="site-nav__mobile-cta" href="reserve.html">鑑定を申し込む</a>
       </nav>
       <a class="btn btn--primary site-header__cta" href="reserve.html">鑑定を申し込む</a>
       <button class="nav-toggle" type="button" aria-label="メニューを開閉する" aria-expanded="false">
@@ -52,21 +65,30 @@
 
             <div class="form-grid">
               <div class="form-field">
-                <label for="name">御名前</label>
+                <label class="form-label" for="name">
+                  <span>御名前</span>
+                  <span class="form-meta form-meta--required">必須</span>
+                </label>
                 <input id="name" name="name" type="text" autocomplete="name" placeholder="例：山田 花子" required>
               </div>
 
-              <div class="form-row form-row--two">
-                <div class="form-field">
-                  <label for="birth-date">生年月日</label>
-                  <input id="birth-date" name="birth_date" type="date" autocomplete="bday" required>
-                  <p class="form-hint">カレンダーから選択できます。</p>
-                </div>
-                <div class="form-field">
-                  <label for="birth-hour">出生時間</label>
-                  <div class="time-selects">
+              <div class="form-field">
+                <label class="form-label" for="birth-date">
+                  <span>生年月日</span>
+                  <span class="form-meta form-meta--required">必須</span>
+                </label>
+                <input id="birth-date" name="birth_date" type="date" autocomplete="bday" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="birth-hour">
+                  <span>出生時間</span>
+                  <span class="form-meta form-meta--optional">任意</span>
+                </label>
+                <div class="time-entry">
+                  <div class="time-selects time-selects--inline">
                     <label class="time-select">
-                      <select id="birth-hour" name="birth_hour" aria-label="出生時間の時" required>
+                      <select id="birth-hour" name="birth_hour" aria-label="出生時間の時" data-birth-hour>
                         <option value="">時</option>
                         <option value="00">00</option>
                         <option value="01">01</option>
@@ -96,7 +118,7 @@
                       <span>時</span>
                     </label>
                     <label class="time-select">
-                      <select name="birth_minute" aria-label="出生時間の分" required>
+                      <select name="birth_minute" aria-label="出生時間の分" data-birth-minute>
                         <option value="">分</option>
                         <option value="00">00</option>
                         <option value="01">01</option>
@@ -162,27 +184,42 @@
                       <span>分</span>
                     </label>
                   </div>
-                  <p class="form-hint">時と分をそれぞれ選択してください。</p>
+                  <label class="form-checkbox form-checkbox--subtle form-checkbox--inline">
+                    <input id="birth-time-unknown" name="birth_time_unknown" type="checkbox" data-birth-time-unknown>
+                    <span>不明</span>
+                  </label>
                 </div>
               </div>
 
               <div class="form-field">
-                <label for="birth-place">出生地</label>
+                <label class="form-label" for="birth-place">
+                  <span>出生地</span>
+                  <span class="form-meta form-meta--required">必須</span>
+                </label>
                 <input id="birth-place" name="birth_place" type="text" placeholder="例：愛知県刈谷市" required>
               </div>
 
               <div class="form-field">
-                <label for="contact">連絡先（電話など）</label>
-                <input id="contact" name="contact" type="text" autocomplete="tel" placeholder="例：090-0000-0000">
+                <label class="form-label" for="contact">
+                  <span>電話番号</span>
+                  <span class="form-meta form-meta--optional">任意</span>
+                </label>
+                <input id="contact" name="contact" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="[0-9]{10,11}" maxlength="11" placeholder="例：09000000000" title="電話番号は数字のみで入力してください">
               </div>
 
               <div class="form-field">
-                <label for="email">メールアドレス</label>
-                <input id="email" name="email" type="email" autocomplete="email" placeholder="例：sample@example.com" required>
+                <label class="form-label" for="email">
+                  <span>メールアドレス</span>
+                  <span class="form-meta form-meta--required">必須</span>
+                </label>
+                <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="例：sample@example.com" required>
               </div>
 
               <div class="form-field">
-                <label for="type">鑑定種別</label>
+                <label class="form-label" for="type">
+                  <span>鑑定種別</span>
+                  <span class="form-meta form-meta--required">必須</span>
+                </label>
                 <select id="type" name="type" required>
                   <option value="">選択してください</option>
                   <option value="対面・電話鑑定">対面・電話鑑定</option>
@@ -194,7 +231,10 @@
               </div>
 
               <div class="form-field">
-                <label for="message">御相談内容（できれば具体的に）</label>
+                <label class="form-label" for="message">
+                  <span>御相談内容（できれば具体的に）</span>
+                  <span class="form-meta form-meta--required">必須</span>
+                </label>
                 <textarea id="message" name="message" placeholder="現在のお悩み、知りたいこと、ご希望の鑑定内容などをご入力ください。" required></textarea>
               </div>
 
@@ -218,6 +258,16 @@
               <li>ご相談内容</li>
             </ul>
 
+            <div class="flow-panel">
+              <h3>お申込み後の流れ</h3>
+              <ol class="flow-list">
+                <li>フォームよりお申込み</li>
+                <li>内容確認後、日程・鑑定方法をご連絡</li>
+                <li>料金・お支払い方法のご案内</li>
+                <li>鑑定実施</li>
+              </ol>
+            </div>
+
             <h3>鑑定について</h3>
             <p>鑑定依頼があった時点で「私が占って依頼者様のお役に立てるか？」と占断させて頂くことがあります。</p>
             <p>その時点で私ではお役に立てないという結果が出た場合はお断りさせて頂いております。何卒ご理解のほどお願い致します。</p>
@@ -239,8 +289,12 @@
           <h2>富永祥玲の鑑定室</h2>
           <p>やさしい光を、あなたの未来へ。四柱推命・紫微斗数・六壬神課・九星術・タロット・風水等で鑑定致します。</p>
           <div class="site-footer__social" aria-label="SNSロゴ">
-            <img src="assets/images/social/instagram.png" alt="Instagram" loading="lazy">
-            <img src="assets/images/social/line.png" alt="LINE" loading="lazy">
+            <a class="social-link" href="https://www.instagram.com/forever_field26?igsh=MTN0aDhyNDY4bnM2bQ==&utm_source=ig_contact_invite" target="_blank" rel="noopener noreferrer" aria-label="Instagramを開く">
+              <img src="assets/images/social/instagram.png" alt="Instagram" loading="lazy">
+            </a>
+            <a class="social-link" href="https://lin.ee/yJiMHfJ" target="_blank" rel="noopener noreferrer" aria-label="LINEを開く">
+              <img src="assets/images/social/line.png" alt="LINE" loading="lazy">
+            </a>
           </div>
         </div>
           <div>
@@ -251,7 +305,7 @@
               <li><a href="art.html">占術紹介</a></li>
               <li><a href="kantei.html">鑑定について</a></li>
               <li><a href="reserve.html">鑑定申込み</a></li>
-              <li><a href="https://ameblo.jp/lily-1410/" target="_blank" rel="noopener noreferrer">ブログ</a></li>
+              <li><a href="blog.html">ブログ</a></li>
               <li><a href="access.html">アクセス</a></li>
             </ul>
           </div>
