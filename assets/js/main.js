@@ -86,18 +86,20 @@ if (bookingForm) {
 
     const message = bookingForm.querySelector("[data-form-message]");
     if (message) {
-      const formData = new FormData(bookingForm);
-      const birthDate = String(formData.get("birth_date") || "").trim();
-      const isUnknown = formData.get("birth_time_unknown") === "on";
-      const birthHourValue = String(formData.get("birth_hour") || "").trim();
-      const birthMinuteValue = String(formData.get("birth_minute") || "").trim();
-      const birthTime = isUnknown
-        ? "不明"
-        : birthHourValue && birthMinuteValue
-          ? `${birthHourValue}:${birthMinuteValue}`
-          : "未入力";
+      message.textContent = "送信機能は公開時に接続します。現在は入力確認用の画面です。";
+    }
+  });
+}
 
-      message.textContent = `送信機能は公開時に接続します。入力内容をご確認ください。生年月日：${birthDate || "未入力"} / 出生時間：${birthTime}`;
+const courseForm = document.querySelector("[data-course-form]");
+
+if (courseForm) {
+  courseForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const message = courseForm.querySelector("[data-course-message]");
+    if (message) {
+      message.textContent = "送信機能は公開時に接続します。現在は入力確認用の画面です。";
     }
   });
 }
