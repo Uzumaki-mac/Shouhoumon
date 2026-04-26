@@ -1,6 +1,7 @@
-# 富永祥玲の鑑定室 — サイト概要
+# ト術 奏亨門（BOKUJUTSU SOHOMON）— サイト概要
 
 愛知県刈谷市の占い師・富永祥玲による鑑定室の公式Webサイト。
+屋号: **ト術 奏亨門**（ぼくじゅつ そうこうもん）
 四柱推命・紫微斗数・六壬神課・九星術・手相・タロット・風水を扱う。
 
 ---
@@ -54,6 +55,7 @@ firebase hosting:channel:deploy preview
 │       │   └── icons/      # 占術アイコン（icon-*.png 各占術分）
 │       ├── courses/        # 講座ページ用ビジュアル
 │       ├── access/         # アクセスページ用写真
+│       ├── calligraphy/    # 書道サイン画像（calligraphy-shorei.png）
 │       ├── social/         # SNSロゴ（instagram.png / line.png）
 │       └── references/     # 参照用（デザインシステム・サイト参照）
 ├── Design.md               # デザイン仕様書（カラー・タイポ・コピー全記載）
@@ -103,6 +105,8 @@ firebase hosting:channel:deploy preview
 | `.soft-card` | 番号付きカード（ホームの3ステップ等） |
 | `.cta-band` | 幅広CTAバナー（各ページ末尾） |
 | `.notice-strip` | お知らせ帯（ホーム上部） |
+| `.signature-image` | 書道サイン画像（`calligraphy-shorei.png`、`clamp(184px, 24vw, 328px)`） |
+| `.home-blog-preview` | ホームのブログ一覧プレビュー（画像非表示・リスト形式） |
 
 ---
 
@@ -154,3 +158,5 @@ firebase hosting:channel:deploy preview
 - `firebase.json` で全ページに `X-Robots-Tag: noindex, nofollow, noarchive` を付与中（制作中のため）。本番公開時は削除すること
 - フォーム送信はモック状態（`main.js` の `bookingForm` ハンドラ）。公開前にバックエンド（メール送信等）を接続すること
 - `index.html` のブログリンクが旧 Ameba URL のまま（他ページは `blog.html` に更新済み）。要確認
+- 屋号変更: 旧「富永祥玲の鑑定室 / SHOREI TOMINAGA FORTUNE TELLING ROOM」→ 新「ト術 奏亨門 / BOKUJUTSU SOHOMON」（全ページ適用済み）
+- 署名はテキスト `<p class="signature">` から書道画像 `<img class="signature-image">` に変更済み
