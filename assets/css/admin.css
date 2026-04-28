@@ -1,0 +1,394 @@
+:root {
+  --bg: #f7f4ef;
+  --surface: #fffdf9;
+  --surface-soft: #f2ece4;
+  --line: rgba(125, 105, 88, 0.18);
+  --text: #5f554d;
+  --muted: #8d8176;
+  --accent: #b79a7a;
+  --danger: #9b5c55;
+  --shadow: 0 16px 40px rgba(92, 74, 55, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.admin-shell {
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.login-view {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: auto;
+}
+
+.login-panel {
+  width: min(100%, 460px);
+  padding: 34px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+.login-panel h1,
+.admin-header h1 {
+  margin-bottom: 12px;
+  font-size: 1.7rem;
+  letter-spacing: 0.04em;
+}
+
+.login-panel p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 42px;
+  padding: 0.7rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.primary-button {
+  width: 100%;
+  color: #fff;
+  background: var(--accent);
+}
+
+.secondary-button {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+.message {
+  min-height: 1.8em;
+  margin: 14px 0 0;
+  color: var(--danger);
+}
+
+.dashboard {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100% - 32px, 1320px);
+  margin: 0 auto;
+  padding: 16px 0;
+  overflow: hidden;
+}
+
+.admin-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.summary-grid {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-grid div,
+.toolbar,
+.submission-list,
+.detail-pane {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.summary-grid div {
+  padding: 16px 18px;
+}
+
+.summary-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.7rem;
+}
+
+.toolbar {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 160px)) minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+}
+
+.toolbar label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.toolbar select,
+.toolbar input,
+.detail-pane select,
+.detail-pane textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 0.55rem 0.7rem;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.work-area {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+}
+
+.submission-list {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.submission-item {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 16px;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+
+.submission-item.is-selected {
+  background: var(--surface-soft);
+}
+
+.item-top,
+.item-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.management-id {
+  font-weight: 700;
+}
+
+.status-pill {
+  padding: 0.18rem 0.48rem;
+  color: var(--text);
+  background: var(--surface-soft);
+  border-radius: 999px;
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.submission-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.item-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.detail-pane {
+  min-width: 0;
+  min-height: 0;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.empty-state {
+  color: var(--muted);
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.detail-header h2 {
+  margin-bottom: 8px;
+  font-size: 1.3rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 10px 14px;
+  margin: 18px 0;
+}
+
+.detail-grid dt {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.detail-grid dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.message-box {
+  margin: 18px 0;
+  padding: 14px;
+  white-space: pre-wrap;
+  background: var(--surface-soft);
+  border-radius: 6px;
+  line-height: 1.75;
+}
+
+.admin-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.admin-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.admin-form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.save-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.save-message {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 860px) {
+  .admin-shell {
+    height: auto;
+    overflow: visible;
+  }
+
+  .login-view {
+    min-height: 100dvh;
+  }
+
+  .dashboard {
+    flex: none;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 24px;
+  }
+
+  .admin-header,
+  .admin-user {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .work-area {
+    flex: none;
+    grid-template-columns: 1fr;
+  }
+
+  .submission-list {
+    max-height: 400px;
+  }
+}

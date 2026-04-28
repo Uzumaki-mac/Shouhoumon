@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>管理ダッシュボード | ト術 奏亨門</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20260428-layout-v2">
+</head>
+
+<body>
+  <main class="admin-shell">
+    <section class="login-view" data-login-view>
+      <div class="login-panel">
+        <p class="eyebrow">BOKUJUTSU SOHOMON</p>
+        <h1>管理ダッシュボード</h1>
+        <p>フォームから届いた申込みを確認し、対応状況と管理メモを更新できます。</p>
+        <button class="primary-button" type="button" data-login-button>Googleでログイン</button>
+        <p class="message" data-login-message aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="dashboard is-hidden" data-dashboard>
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">FORM ADMIN</p>
+          <h1>申込み管理</h1>
+        </div>
+        <div class="admin-user">
+          <span data-user-email></span>
+          <button class="secondary-button" type="button" data-logout-button>ログアウト</button>
+        </div>
+      </header>
+
+      <section class="summary-grid" aria-label="申込み集計">
+        <div>
+          <span>未対応</span>
+          <strong data-count-open>0</strong>
+        </div>
+        <div>
+          <span>本日</span>
+          <strong data-count-today>0</strong>
+        </div>
+        <div>
+          <span>総件数</span>
+          <strong data-count-total>0</strong>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="絞り込み">
+        <label>
+          <span>種別</span>
+          <select data-filter-type>
+            <option value="">すべて</option>
+            <option value="reserve">鑑定申込み</option>
+            <option value="kouza">講座申込み</option>
+          </select>
+        </label>
+        <label>
+          <span>状態</span>
+          <select data-filter-status>
+            <option value="">すべて</option>
+            <option value="未対応">未対応</option>
+            <option value="返信済み">返信済み</option>
+            <option value="日程調整中">日程調整中</option>
+            <option value="確定">確定</option>
+            <option value="完了">完了</option>
+            <option value="キャンセル">キャンセル</option>
+          </select>
+        </label>
+        <label>
+          <span>期間</span>
+          <select data-filter-date>
+            <option value="">すべて</option>
+            <option value="today">今日</option>
+            <option value="yesterday">昨日</option>
+            <option value="this-week">今週</option>
+            <option value="last-week">先週</option>
+            <option value="this-month">今月</option>
+            <option value="last-month">先月</option>
+            <option value="this-year">今年</option>
+            <option value="last-year">昨年</option>
+          </select>
+        </label>
+        <label>
+          <span>並び順</span>
+          <select data-sort-order>
+            <option value="desc">新しい順</option>
+            <option value="asc">古い順</option>
+          </select>
+        </label>
+        <label class="search-field">
+          <span>検索</span>
+          <input type="search" data-search-input placeholder="管理番号・名前・メール">
+        </label>
+      </section>
+
+      <section class="work-area">
+        <div class="submission-list" data-submission-list aria-label="申込み一覧"></div>
+
+        <article class="detail-pane" data-detail-pane>
+          <p class="empty-state">左の一覧から申込みを選択してください。</p>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="assets/js/admin.js?v=20260428-layout-v2"></script>
+</body>
+
+</html>
