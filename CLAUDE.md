@@ -28,6 +28,23 @@ firebase hosting:channel:deploy preview
 
 ---
 
+## Firebase Authentication
+
+管理画面へのログイン用に Google サインインを設定済み。
+
+| 項目 | 値 |
+|---|---|
+| プロバイダ | Google |
+| サポートメール | isao5271@gmail.com |
+| OAuth 公開名（同意画面に表示） | ト術 奏亨門 |
+| 公開ステータス | テスト中（Testing） |
+
+- 公開ステータスは「テスト中」のまま運用。Google による審査不要
+- ログインできるのはテストユーザーとして登録されたアカウントのみ
+- テストユーザーの追加: Firebase Console → Authentication → Settings → テストユーザー
+
+---
+
 ## ファイル構成
 
 ```
