@@ -1861,6 +1861,7 @@ button {
 .form-field {
   display: grid;
   gap: 8px;
+  min-width: 0;
 }
 
 .form-field label {
@@ -1906,6 +1907,8 @@ button {
 .form-field select,
 .form-field textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 52px;
   padding: 0.9rem 1rem;
   color: var(--color-heading);
