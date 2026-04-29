@@ -175,7 +175,9 @@ firebase hosting:channel:deploy preview
 ## 注意事項
 
 - `firebase.json` の `X-Robots-Tag: noindex` は削除済み（本番公開済み）。`admin.html` のみ `<meta name="robots" content="noindex">` を個別に設定
-- フォーム送信はモック状態（`main.js` の `bookingForm` ハンドラ）。バックエンド（メール送信等）未接続
+- Cloud Functions `submitForm`（asia-northeast1 / Node.js 22）はデプロイ済み・稼働中
+- Firebase Secrets `ADMIN_EMAIL` / `SMTP_USER` は現在 `isao5271@gmail.com`。富永さんのGmail取得後に更新し、フォームテスト送信で動作確認すること
+- フォームの `main.js` 内モックハンドラは Functions 接続後に削除予定
 - 屋号変更: 旧「富永祥玲の鑑定室 / SHOREI TOMINAGA FORTUNE TELLING ROOM」→ 新「ト術 奏亨門 / BOKUJUTSU SOHOMON」（全ページ適用済み）
 - 署名はテキスト `<p class="signature">` から書道画像 `<img class="signature-image">` に変更済み
 - カスタムドメイン `sohomon.com` を Firebase Hosting に設定済み（2026-04-29）
