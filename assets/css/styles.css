@@ -194,18 +194,10 @@ button {
   transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-}
-
 .btn--primary {
   color: #fff;
   background: var(--color-gold);
   box-shadow: 0 12px 24px rgba(183, 154, 122, 0.2);
-}
-
-.btn--primary:hover {
-  background: var(--color-dark-gold);
 }
 
 .btn--secondary {
@@ -214,19 +206,10 @@ button {
   border-color: rgba(189, 175, 158, 0.34);
 }
 
-.btn--secondary:hover {
-  background: var(--color-light-beige);
-}
-
 .btn--ghost {
   color: var(--color-warm-gray);
   background: rgba(255, 255, 255, 0.34);
   border-color: rgba(168, 154, 138, 0.5);
-}
-
-.btn--ghost:hover {
-  color: var(--color-heading);
-  border-color: var(--color-dark-gold);
 }
 
 .text-link {
@@ -526,6 +509,8 @@ button {
 
 .photo-card {
   position: relative;
+  width: min(100%, 520px);
+  justify-self: center;
   padding: 18px;
   background: rgba(255, 253, 249, 0.65);
   border: 1px solid rgba(189, 175, 158, 0.2);
@@ -533,22 +518,11 @@ button {
   box-shadow: var(--shadow-card);
 }
 
-.photo-card::before {
-  position: absolute;
-  inset: -18px 22px auto auto;
-  width: 68px;
-  height: 68px;
-  content: "";
-  border: 1px solid rgba(183, 154, 122, 0.38);
-  border-left: 0;
-  border-radius: 50%;
-  transform: rotate(-30deg);
-}
-
 .photo-card img {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  object-position: center center;
   border-radius: 20px;
 }
 
@@ -1318,6 +1292,25 @@ button {
   color: var(--color-heading);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--primary:hover {
+    background: var(--color-dark-gold);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-light-beige);
+  }
+
+  .btn--ghost:hover {
+    color: var(--color-heading);
+    border-color: var(--color-dark-gold);
+  }
+}
+
 .course-outline li {
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(189, 175, 158, 0.18);
@@ -1652,12 +1645,15 @@ button {
 .profile-photo {
   position: sticky;
   top: calc(var(--header-height) + 28px);
+  width: min(100%, 520px);
+  justify-self: center;
 }
 
 .profile-photo img {
   width: 100%;
-  aspect-ratio: 3 / 4.2;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
+  object-position: center center;
   border-radius: 30px;
   box-shadow: var(--shadow-soft);
 }
@@ -1837,6 +1833,7 @@ button {
 }
 
 .form-card {
+  min-width: 0;
   padding: clamp(26px, 4vw, 44px);
   background: rgba(255, 253, 249, 0.78);
   border: 1px solid rgba(189, 175, 158, 0.24);
@@ -1847,6 +1844,7 @@ button {
 .form-grid {
   display: grid;
   gap: 20px;
+  min-width: 0;
 }
 
 .form-row {
@@ -1906,9 +1904,13 @@ button {
 .form-field input,
 .form-field select,
 .form-field textarea {
+  display: block;
   width: 100%;
+  inline-size: 100%;
   min-width: 0;
+  min-inline-size: 0;
   max-width: 100%;
+  max-inline-size: 100%;
   min-height: 52px;
   padding: 0.9rem 1rem;
   color: var(--color-heading);
@@ -1919,16 +1921,57 @@ button {
   transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
+.form-field input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  line-height: 1.4;
+  background-clip: padding-box;
+}
+
 .form-field select {
   padding-right: 3.4rem;
   font-family: var(--font-sans);
   font-weight: 500;
+  color: var(--color-heading);
   -webkit-appearance: none;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='12' viewBox='0 0 18 12' fill='none'%3E%3Cpath d='M3 3.5L9 9L15 3.5' stroke='%236b6159' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1.15rem center;
   background-size: 18px 12px;
+}
+
+.form-field select:required:invalid {
+  color: var(--color-warm-gray);
+}
+
+.form-field select:has(option[value=""]:checked) {
+  color: var(--color-warm-gray);
+}
+
+.form-field select:required:valid {
+  color: var(--color-heading);
+}
+
+.form-field input.is-required-missing,
+.form-field select.is-required-missing,
+.form-field textarea.is-required-missing {
+  background-color: rgba(255, 248, 244, 0.96);
+  border-color: rgba(155, 92, 85, 0.72);
+  box-shadow: 0 0 0 3px rgba(155, 92, 85, 0.08);
+}
+
+.form-field.is-required-missing .form-label {
+  color: #9b5c55;
+}
+
+.form-checkbox.is-required-missing span {
+  color: #9b5c55;
+}
+
+.form-checkbox.is-required-missing input {
+  outline: 3px solid rgba(155, 92, 85, 0.16);
+  outline-offset: 3px;
 }
 
 .form-field textarea {
@@ -1942,6 +1985,19 @@ button {
   background: #fffdf9;
   border-color: var(--color-dark-gold);
   box-shadow: 0 0 0 4px rgba(230, 186, 122, 0.14);
+}
+
+.form-field--website {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  margin: -1px;
+  white-space: nowrap;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
 }
 
 .form-field ::placeholder {
@@ -2062,6 +2118,21 @@ button {
   margin: 0;
   color: var(--color-dark-gold);
   font-size: 0.92rem;
+  white-space: pre-line;
+}
+
+.form-message[data-state="error"] {
+  color: #9b5c55;
+}
+
+.form-message[data-state="success"] {
+  color: var(--color-heading);
+}
+
+.form-field button:disabled,
+.form-card button:disabled {
+  cursor: progress;
+  opacity: 0.72;
 }
 
 .form-support-note,
@@ -2733,6 +2804,12 @@ button {
 
   .form-label {
     gap: 8px;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    font-size: 16px;
   }
 
   .achievement-panel {

@@ -1,25 +1,39 @@
 {
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
   "hosting": {
     "public": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
+      "functions/**",
       "txt/**",
       "Design.md",
       "firebase-debug.log",
       "firebase-debug.*.log"
     ],
-    "headers": [
+    "rewrites": [
       {
-        "source": "**",
-        "headers": [
-          {
-            "key": "X-Robots-Tag",
-            "value": "noindex, nofollow, noarchive"
-          }
-        ]
-      },
+        "source": "/api/submit",
+        "function": {
+          "functionId": "submitForm",
+          "region": "asia-northeast1"
+        }
+      }
+    ],
+    "headers": [
       {
         "source": "**/*.@(jpg|jpeg|png|webp|svg|gif)",
         "headers": [
@@ -39,5 +53,8 @@
         ]
       }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

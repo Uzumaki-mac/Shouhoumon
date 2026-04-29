@@ -3,3 +3,10 @@
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
+.env
+.env.*
+.secret.local
+functions/.env
+functions/.env.*
+functions/.secret.local
+functions/node_modules/

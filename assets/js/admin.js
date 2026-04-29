@@ -8,6 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
   collection,
+  deleteDoc,
   doc,
   getFirestore,
   limit,
@@ -57,6 +58,8 @@ const elements = {
 let submissions = [];
 let selectedId = "";
 let unsubscribeSubmissions = null;
+let checkedIds = new Set();
+let filteredCache = [];
 
 const setLoginMessage = (message) => {
   elements.loginMessage.textContent = message;
@@ -176,42 +179,121 @@ const updateCounts = () => {
 const renderList = () => {
   updateCounts();
   const filtered = getFilteredSubmissions();
+  filteredCache = filtered;
+
+  const checkedInFiltered = filtered.filter((item) => checkedIds.has(item.managementId));
+
+  // List action header (sticky)
+  const header = document.createElement("div");
+  header.className = "list-actions";
+
+  const selectAllLabel = document.createElement("label");
+  selectAllLabel.className = "select-all-label";
+  const selectAllCheckbox = document.createElement("input");
+  selectAllCheckbox.type = "checkbox";
+  selectAllCheckbox.checked = filtered.length > 0 && checkedInFiltered.length === filtered.length;
+  selectAllCheckbox.indeterminate = checkedInFiltered.length > 0 && checkedInFiltered.length < filtered.length;
+  selectAllCheckbox.addEventListener("change", () => {
+    if (selectAllCheckbox.checked) {
+      filtered.forEach((item) => checkedIds.add(item.managementId));
+    } else {
+      filtered.forEach((item) => checkedIds.delete(item.managementId));
+    }
+    renderList();
+  });
+  const selectAllText = document.createElement("span");
+  selectAllText.textContent = filtered.length ? `全選択（${filtered.length}件）` : "全選択";
+  selectAllLabel.appendChild(selectAllCheckbox);
+  selectAllLabel.appendChild(selectAllText);
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "danger-button";
+  deleteButton.textContent = checkedInFiltered.length > 0 ? `削除（${checkedInFiltered.length}件）` : "削除";
+  deleteButton.disabled = checkedInFiltered.length === 0;
+  deleteButton.addEventListener("click", deleteSelected);
+
+  header.appendChild(selectAllLabel);
+  header.appendChild(deleteButton);
 
   if (!filtered.length) {
-    elements.list.innerHTML = '<p class="empty-state" style="padding: 16px;">該当する申込みはありません。</p>';
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.style.padding = "16px";
+    empty.textContent = "該当する申込みはありません。";
+    elements.list.replaceChildren(header, empty);
     renderDetail();
     return;
   }
 
-  elements.list.replaceChildren(
-    ...filtered.map((item) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = `submission-item${item.managementId === selectedId ? " is-selected" : ""}`;
-      button.innerHTML = `
-        <div class="item-top">
-          <span class="management-id">${item.managementId || ""}</span>
-          <span class="status-pill">${item.status || "未対応"}</span>
-        </div>
-        <div class="submission-name">${item.name || "名前なし"}</div>
-        <div class="item-meta">
-          <span>${item.typeLabel || ""}</span>
-          <span>${formatDate(item.createdAt)}</span>
-        </div>
-      `;
-      button.addEventListener("click", () => {
-        selectedId = item.managementId;
-        renderList();
-        renderDetail();
-      });
-      return button;
-    })
-  );
+  const rows = filtered.map((item) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "submission-row";
+
+    const checkLabel = document.createElement("label");
+    checkLabel.className = "item-check";
+    checkLabel.addEventListener("click", (e) => e.stopPropagation());
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = checkedIds.has(item.managementId);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        checkedIds.add(item.managementId);
+      } else {
+        checkedIds.delete(item.managementId);
+      }
+      renderList();
+    });
+    checkLabel.appendChild(checkbox);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `submission-item${item.managementId === selectedId ? " is-selected" : ""}`;
+    button.innerHTML = `
+      <div class="item-top">
+        <span class="management-id">${item.managementId || ""}</span>
+        <span class="status-pill">${item.status || "未対応"}</span>
+      </div>
+      <div class="submission-name">${item.name || "名前なし"}</div>
+      <div class="item-meta">
+        <span>${item.typeLabel || ""}</span>
+        <span>${formatDate(item.createdAt)}</span>
+      </div>
+    `;
+    button.addEventListener("click", () => {
+      selectedId = item.managementId;
+      renderList();
+      renderDetail();
+    });
+
+    wrapper.appendChild(checkLabel);
+    wrapper.appendChild(button);
+    return wrapper;
+  });
+
+  elements.list.replaceChildren(header, ...rows);
 
   if (!filtered.some((item) => item.managementId === selectedId)) {
     selectedId = filtered[0].managementId;
     renderList();
     renderDetail();
+  }
+};
+
+const deleteSelected = async () => {
+  const toDelete = filteredCache.filter((item) => checkedIds.has(item.managementId));
+  if (!toDelete.length) return;
+
+  if (!confirm(`選択した ${toDelete.length} 件を削除しますか？\nこの操作は元に戻せません。`)) return;
+
+  try {
+    await Promise.all(toDelete.map((item) => deleteDoc(doc(db, "submissions", item.managementId))));
+    toDelete.forEach((item) => {
+      checkedIds.delete(item.managementId);
+      if (item.managementId === selectedId) selectedId = "";
+    });
+  } catch (error) {
+    console.error(error);
+    alert("削除できませんでした。");
   }
 };
 

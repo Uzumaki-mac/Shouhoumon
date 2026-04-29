@@ -10,6 +10,8 @@
 
 - **HTML / CSS / JavaScript** のみ（ビルドツール・フレームワーク不使用）
 - **Firebase Hosting** でホスティング（プロジェクトID: `shouhoumon-20260424-214632`）
+- **本番ドメイン**: https://sohomon.com
+- **Google Analytics**: G-FHW9SX5R7J（全ページ導入済み）
 - **Google Fonts**: Noto Serif JP（見出し）+ Noto Sans JP（本文）
 - **GitHub**: https://github.com/Uzumaki-mac/Shouhoumon
 - ブランチ: `main` のみ
@@ -172,8 +174,11 @@ firebase hosting:channel:deploy preview
 
 ## 注意事項
 
-- `firebase.json` で全ページに `X-Robots-Tag: noindex, nofollow, noarchive` を付与中（制作中のため）。本番公開時は削除すること
-- フォーム送信はモック状態（`main.js` の `bookingForm` ハンドラ）。公開前にバックエンド（メール送信等）を接続すること
-- `index.html` のブログリンクが旧 Ameba URL のまま（他ページは `blog.html` に更新済み）。要確認
+- `firebase.json` の `X-Robots-Tag: noindex` は削除済み（本番公開済み）。`admin.html` のみ `<meta name="robots" content="noindex">` を個別に設定
+- フォーム送信はモック状態（`main.js` の `bookingForm` ハンドラ）。バックエンド（メール送信等）未接続
 - 屋号変更: 旧「富永祥玲の鑑定室 / SHOREI TOMINAGA FORTUNE TELLING ROOM」→ 新「ト術 奏亨門 / BOKUJUTSU SOHOMON」（全ページ適用済み）
 - 署名はテキスト `<p class="signature">` から書道画像 `<img class="signature-image">` に変更済み
+- カスタムドメイン `sohomon.com` を Firebase Hosting に設定済み（2026-04-29）
+- OGP/Twitter 画像は絶対URL（`https://sohomon.com/assets/images/...`）で記述すること
+- `sitemap.xml` / `robots.txt` を追加済み（URLは `sohomon.com` ベース）
+- 管理ダッシュボード（`admin.html`）から申込みの一括選択・削除が可能（Firestore rules で管理者のみ delete 許可）

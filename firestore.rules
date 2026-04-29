@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "isao5271@gmail.com";
+    }
+
+    function validStatus(status) {
+      return status in [
+        "未対応",
+        "返信済み",
+        "日程調整中",
+        "確定",
+        "完了",
+        "キャンセル"
+      ];
+    }
+
+    match /submissions/{document} {
+      allow get, list: if isAdmin();
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "status",
+          "adminMemo",
+          "updatedAt"
+        ])
+        && validStatus(request.resource.data.status)
+        && request.resource.data.adminMemo is string
+        && request.resource.data.adminMemo.size() <= 4000;
+      allow create: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /counters/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /rateLimits/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
