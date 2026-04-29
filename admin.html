@@ -11,7 +11,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&amp;display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/admin.css?v=20260429-delete">
+  <link rel="stylesheet" href="assets/css/admin.css?v=20260429-daterange">
 </head>
 
 <body>
@@ -86,6 +86,7 @@
             <option value="last-month">先月</option>
             <option value="this-year">今年</option>
             <option value="last-year">昨年</option>
+            <option value="custom">カスタム期間</option>
           </select>
         </label>
         <label>
@@ -99,6 +100,16 @@
           <span>検索</span>
           <input type="search" data-search-input placeholder="管理番号・名前・メール">
         </label>
+        <div class="date-range-row is-hidden" data-date-range-row>
+          <label>
+            <span>開始日</span>
+            <input type="date" data-date-from>
+          </label>
+          <label>
+            <span>終了日</span>
+            <input type="date" data-date-to>
+          </label>
+        </div>
       </section>
 
       <section class="work-area">
@@ -111,7 +122,7 @@
     </section>
   </main>
 
-  <script type="module" src="assets/js/admin.js?v=20260429-delete"></script>
+  <script type="module" src="assets/js/admin.js?v=20260429-daterange"></script>
 </body>
 
 </html>

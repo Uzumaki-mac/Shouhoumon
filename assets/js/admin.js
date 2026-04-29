@@ -19,7 +19,7 @@ import {
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-const ADMIN_EMAIL = "isao5271@gmail.com";
+const ADMIN_EMAILS = ["isao5271@gmail.com", "ShoreiTominaga@gmail.com"];
 const STATUS_OPTIONS = ["未対応", "返信済み", "日程調整中", "確定", "完了", "キャンセル"];
 
 const firebaseConfig = {
@@ -50,6 +50,9 @@ const elements = {
   filterDate: document.querySelector("[data-filter-date]"),
   sortOrder: document.querySelector("[data-sort-order]"),
   searchInput: document.querySelector("[data-search-input]"),
+  dateRangeRow: document.querySelector("[data-date-range-row]"),
+  dateFrom: document.querySelector("[data-date-from]"),
+  dateTo: document.querySelector("[data-date-to]"),
   countOpen: document.querySelector("[data-count-open]"),
   countToday: document.querySelector("[data-count-today]"),
   countTotal: document.querySelector("[data-count-total]"),
@@ -138,11 +141,22 @@ const getDateRange = (period) => {
   }
 };
 
+const getCustomDateRange = () => {
+  const from = elements.dateFrom?.value;
+  const to = elements.dateTo?.value;
+  if (!from && !to) return null;
+  return {
+    start: from ? new Date(from + "T00:00:00+09:00") : null,
+    end: to ? new Date(to + "T23:59:59+09:00") : null,
+  };
+};
+
 const getFilteredSubmissions = () => {
   const type = elements.filterType.value;
   const status = elements.filterStatus.value;
   const search = normalizeSearch(elements.searchInput.value);
-  const dateRange = getDateRange(elements.filterDate?.value);
+  const period = elements.filterDate?.value;
+  const dateRange = period === "custom" ? getCustomDateRange() : getDateRange(period);
   const ascending = elements.sortOrder?.value === "asc";
 
   const filtered = submissions.filter((item) => {
@@ -150,8 +164,9 @@ const getFilteredSubmissions = () => {
     if (status && item.status !== status) return false;
     if (dateRange) {
       const ts = item.createdAt?.toDate?.();
-      if (!ts || ts < dateRange.start) return false;
-      if (dateRange.end && ts >= dateRange.end) return false;
+      if (!ts) return false;
+      if (dateRange.start && ts < dateRange.start) return false;
+      if (dateRange.end && ts > dateRange.end) return false;
     }
     if (!search) return true;
     return [item.managementId, item.name, item.email, item.phone, item.message]
@@ -418,7 +433,15 @@ elements.logoutButton.addEventListener("click", () => {
   signOut(auth);
 });
 
-[elements.filterType, elements.filterStatus, elements.filterDate, elements.sortOrder, elements.searchInput].forEach((element) => {
+elements.filterDate?.addEventListener("change", () => {
+  const isCustom = elements.filterDate.value === "custom";
+  elements.dateRangeRow?.classList.toggle("is-hidden", !isCustom);
+  if (!isCustom && elements.dateFrom) elements.dateFrom.value = "";
+  if (!isCustom && elements.dateTo) elements.dateTo.value = "";
+  renderList();
+});
+
+[elements.filterType, elements.filterStatus, elements.sortOrder, elements.searchInput, elements.dateFrom, elements.dateTo].forEach((element) => {
   if (!element) return;
   element.addEventListener("input", renderList);
   element.addEventListener("change", renderList);
@@ -435,7 +458,7 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  if (user.email !== ADMIN_EMAIL) {
+  if (!ADMIN_EMAILS.includes(user.email)) {
     showLogin();
     setLoginMessage("このGoogleアカウントには管理画面の権限がありません。");
     signOut(auth);

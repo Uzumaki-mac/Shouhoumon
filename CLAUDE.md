@@ -176,7 +176,7 @@ firebase hosting:channel:deploy preview
 
 - `firebase.json` の `X-Robots-Tag: noindex` は削除済み（本番公開済み）。`admin.html` のみ `<meta name="robots" content="noindex">` を個別に設定
 - Cloud Functions `submitForm`（asia-northeast1 / Node.js 22）はデプロイ済み・稼働中
-- Firebase Secrets `ADMIN_EMAIL` / `SMTP_USER` は現在 `isao5271@gmail.com`。富永さんのGmail取得後に更新し、フォームテスト送信で動作確認すること
+- Firebase Secrets `ADMIN_EMAIL` / `SMTP_USER` / `SMTP_PASS` は富永さんのGmail（`ShoreiTominaga@gmail.com`）に更新済み（2026-04-29）。フォームテスト送信で動作確認すること
 - フォームの `main.js` 内モックハンドラは Functions 接続後に削除予定
 - 屋号変更: 旧「富永祥玲の鑑定室 / SHOREI TOMINAGA FORTUNE TELLING ROOM」→ 新「ト術 奏亨門 / BOKUJUTSU SOHOMON」（全ページ適用済み）
 - 署名はテキスト `<p class="signature">` から書道画像 `<img class="signature-image">` に変更済み
@@ -184,3 +184,6 @@ firebase hosting:channel:deploy preview
 - OGP/Twitter 画像は絶対URL（`https://sohomon.com/assets/images/...`）で記述すること
 - `sitemap.xml` / `robots.txt` を追加済み（URLは `sohomon.com` ベース）
 - 管理ダッシュボード（`admin.html`）から申込みの一括選択・削除が可能（Firestore rules で管理者のみ delete 許可）
+- 管理画面の許可アカウント（`admin.js` の `ADMIN_EMAILS`）: `isao5271@gmail.com`（永田）・`ShoreiTominaga@gmail.com`（富永）の2件
+- 富永さんのGmail: `ShoreiTominaga@gmail.com`（OAuthテストユーザー登録済み・2026-04-29）
+- 管理ダッシュボードに「カスタム期間」フィルター追加済み（開始日〜終了日の任意指定）

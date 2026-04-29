@@ -207,6 +207,17 @@ p {
   border-radius: 6px;
 }
 
+.date-range-row {
+  display: flex;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+
+.date-range-row label {
+  flex: 1;
+  max-width: 200px;
+}
+
 .work-area {
   flex: 1;
   min-height: 0;
