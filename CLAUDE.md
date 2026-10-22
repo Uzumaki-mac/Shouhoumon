@@ -8,7 +8,8 @@
 
 ## 技術スタック
 
-- **HTML / CSS / JavaScript** のみ（ビルドツール・フレームワーク不使用）
+- フロントエンド: **HTML / CSS / JavaScript**（ビルドツール・フレームワーク不使用）
+- バックエンド: **Firebase Functions / Node.js 22**（フォーム送信・アメブロ記事取得。PHP不使用）
 - **Firebase Hosting** でホスティング（プロジェクトID: `shouhoumon-20260424-214632`）
 - **本番ドメイン**: https://sohomon.com
 - **Google Analytics**: G-FHW9SX5R7J（全ページ導入済み）
@@ -18,15 +19,51 @@
 
 ### デプロイ
 
+画面のみ変更した場合:
+
 ```bash
 firebase deploy --only hosting
 ```
+
+ブログ取得機能を変更した場合は、Functionを先に公開してからHostingを公開する:
+
+```bash
+firebase deploy --only functions:blogFeed
+firebase deploy --only hosting
+```
+
+変更に無関係なFunctionsやFirestoreルールを同時にデプロイしない。公開前に作業ツリーの変更内容を確認する。
 
 プレビュー（本番に影響せず確認）:
 
 ```bash
 firebase hosting:channel:deploy preview
 ```
+
+---
+
+## アメブロ最新記事の自動表示（2026-10-22更新）
+
+- 対象: `index.html` と `blog.html` の最新ブログ欄（3件）
+- ブラウザの `assets/js/main.js` が同一ドメインの `GET /api/blog-feed` を取得
+- `firebase.json` で `blogFeed`（asia-northeast1 / Node.js 22）へ接続
+- `functions/blog-feed.js` が `https://rssblog.ameba.jp/lily-1410/rss20.xml` を取得し、日付の新しい有効な記事3件を返す
+- 日付は日本時間。本文はHTMLを除いた抜粋、画像はアメブロの記事画像を使用
+- 成功レスポンスはFirebase Hostingで5分間キャッシュ。アメブロ側のRSS更新後、サイト側のキャッシュ失効後に新しい記事を取得する
+- ページを開く／再読み込みする際に更新する。開いたままのページの定期再読込は行わない
+- 取得失敗時は古い記事を最新記事として表示せず、アメブロへの案内を表示する
+- 定期ジョブ・手動の記事データ更新・PHPは不要
+- `assets/data/ameblo-feed.json` は旧固定データで、現在の画面からは参照しない
+- `CLAUDE.md` と `firestore.rules` はHostingの公開対象から除外する
+
+検証:
+
+```bash
+npm test --prefix functions
+npm run lint --prefix functions
+```
+
+テストはRSS解析、日本時間の日付、最新順・重複除去、不正データ、キャッシュ、上流エラー・タイムアウト、HTTPメソッドを確認する。
 
 ---
 

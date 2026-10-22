@@ -382,7 +382,7 @@ if (courseForm) {
 const blogFeedContainers = document.querySelectorAll("[data-blog-feed]");
 
 if (blogFeedContainers.length) {
-  const BLOG_FEED_URL = "assets/data/ameblo-feed.json";
+  const BLOG_FEED_URL = "/api/blog-feed";
   const BLOG_ARCHIVE_URL = "https://ameblo.jp/lily-1410/";
   const BLOG_DEFAULT_IMAGE = "assets/images/photos/tarot-candle-soft-wide.png";
 
@@ -483,7 +483,7 @@ if (blogFeedContainers.length) {
 
   const initializeBlogFeed = async () => {
     try {
-      const response = await fetch(BLOG_FEED_URL, { credentials: "same-origin" });
+      const response = await fetch(BLOG_FEED_URL, { credentials: "same-origin", signal: AbortSignal.timeout(20000) });
       if (!response.ok) throw new Error("Feed request failed");
 
       const feed = await response.json();

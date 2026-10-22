@@ -289,3 +289,9 @@ exports.submitForm = onRequest(
     }
   }
 );
+
+// Public RSS endpoint, independent of form submission and email secrets.
+exports.blogFeed = onRequest(
+  { region: "asia-northeast1", invoker: "public", timeoutSeconds: 15, maxInstances: 3 },
+  require("./blog-feed").createBlogFeedHandler()
+);

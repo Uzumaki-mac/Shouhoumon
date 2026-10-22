@@ -22,13 +22,22 @@
       "txt/**",
       "Design.md",
       "firebase-debug.log",
-      "firebase-debug.*.log"
+      "firebase-debug.*.log",
+      "CLAUDE.md",
+      "firestore.rules"
     ],
     "rewrites": [
       {
         "source": "/api/submit",
         "function": {
           "functionId": "submitForm",
+          "region": "asia-northeast1"
+        }
+      },
+      {
+        "source": "/api/blog-feed",
+        "function": {
+          "functionId": "blogFeed",
           "region": "asia-northeast1"
         }
       }
