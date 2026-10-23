@@ -382,118 +382,84 @@ if (courseForm) {
 const blogFeedContainers = document.querySelectorAll("[data-blog-feed]");
 
 if (blogFeedContainers.length) {
-  const BLOG_FEED_URL = "/api/blog-feed";
-  const BLOG_ARCHIVE_URL = "https://ameblo.jp/lily-1410/";
-  const BLOG_DEFAULT_IMAGE = "assets/images/photos/tarot-candle-soft-wide.png";
-
-  const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
-
-  const truncateText = (value, maxLength) => {
-    const text = normalizeText(value);
-    if (text.length <= maxLength) return text;
-    return `${text.slice(0, maxLength).replace(/[。、,.!！?？\s]+$/u, "")}…`;
+  const sources = {
+    ameblo: { name: "アメブロ", url: "https://ameblo.jp/lily-1410/", endpoint: "/api/blog-feed", images: ["assets/images/photos/tarot-candle-soft-wide.png"] },
+    note: { name: "note", url: "https://note.com/magic_auklet8531", endpoint: "/api/note-feed", images: ["assets/images/photos/marble-crystal-wide.png", "assets/images/photos/tarot-candle-soft-wide.png"] },
   };
-
+  const normalizeText = (value) => String(value || "").replace(/\s+/g, " ").trim();
   const safeUrl = (value, fallback) => {
     try {
       const url = new URL(String(value || "").trim(), window.location.href);
-      return url.href;
-    } catch {
-      return fallback;
-    }
+      return ["http:", "https:"].includes(url.protocol) ? url.href : fallback;
+    } catch { return fallback; }
   };
-
-  const createBlogLink = (label, href, className) => {
-    const link = document.createElement("a");
-    link.className = className;
-    link.href = safeUrl(href, BLOG_ARCHIVE_URL);
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = label;
-    return link;
+  const link = (text, url, className) => {
+    const el = document.createElement("a");
+    el.className = className;
+    el.textContent = text;
+    el.href = url;
+    el.target = "_blank";
+    el.rel = "noopener noreferrer";
+    return el;
   };
-
-  const createBlogCard = (post) => {
+  const textElement = (tag, className, text) => {
+    const el = document.createElement(tag);
+    el.className = className;
+    el.textContent = normalizeText(text);
+    return el;
+  };
+  const createCard = (post, source, index) => {
     const card = document.createElement("article");
     card.className = "blog-card";
-
-    const imageWrap = document.createElement("a");
-    imageWrap.className = "blog-card__image";
-    imageWrap.href = safeUrl(post.link, BLOG_ARCHIVE_URL);
-    imageWrap.target = "_blank";
-    imageWrap.rel = "noopener noreferrer";
-    imageWrap.setAttribute("aria-label", `${normalizeText(post.title)} をアメブロで開く`);
-
-    const image = document.createElement("img");
-    const defaultImageSrc = safeUrl(BLOG_DEFAULT_IMAGE, BLOG_DEFAULT_IMAGE);
-    image.src = safeUrl(post.thumbnail || BLOG_DEFAULT_IMAGE, defaultImageSrc);
-    image.alt = "";
-    image.loading = "lazy";
-    image.addEventListener("error", () => {
-      if (image.src !== defaultImageSrc) {
-        image.src = defaultImageSrc;
-      }
-    });
-    imageWrap.append(image);
-
+    const url = safeUrl(post.link, source.url);
+    const imageWrap = link("", url, "blog-card__image");
+    imageWrap.setAttribute("aria-label", `${normalizeText(post.title)} を${source.name}で開く`);
+    const img = document.createElement("img");
+    const fallback = new URL(source.images[index % source.images.length], window.location.href).href;
+    img.src = post.thumbnail ? safeUrl(post.thumbnail, fallback) : fallback;
+    img.alt = "";
+    img.loading = "lazy";
+    img.addEventListener("error", () => { if (img.src !== fallback) img.src = fallback; });
+    imageWrap.append(img);
+    if (!post.thumbnail && source === sources.note) imageWrap.append(textElement("span", "journal-image-label", "note / 富永祥玲"));
     const body = document.createElement("div");
     body.className = "blog-card__body";
-
-    const date = document.createElement("p");
-    date.className = "blog-card__date";
-    date.textContent = normalizeText(post.date);
-
-    const title = document.createElement("h3");
-    title.className = "blog-card__title";
-    title.textContent = normalizeText(post.title);
-
-    const excerpt = document.createElement("p");
-    excerpt.className = "blog-card__excerpt";
-    excerpt.textContent = truncateText(post.excerpt || "詳しくはアメブロをご覧ください。", 84);
-
-    const link = createBlogLink("アメブロで続きを読む", post.link, "blog-card__link");
-
-    body.append(date, title, excerpt, link);
+    const title = textElement("h3", "blog-card__title", "");
+    title.append(link(post.title, url, "journal-title-link"));
+    const excerpt = normalizeText(post.excerpt || `記事の続きは${source.name}でご覧いただけます。`);
+    body.append(textElement("p", "blog-card__date", post.date), title,
+      textElement("p", "blog-card__excerpt", excerpt.length > 84 ? excerpt.slice(0,84)+"…" : excerpt),
+      link(`${source.name}で続きを読む`, url, "blog-card__link"));
     card.append(imageWrap, body);
     return card;
   };
-
-  const renderBlogFallback = (container) => {
-    const fallback = document.createElement("div");
-    fallback.className = "blog-fallback";
-
-    const text = document.createElement("p");
-    text.textContent = "最新記事はアメブロにてご覧いただけます。";
-
-    fallback.append(text);
-    container.replaceChildren(fallback);
+  const noteInvitation = () => {
+    const card = document.createElement("aside");
+    card.className = "blog-card journal-invitation";
+    card.append(textElement("span", "journal-invitation__word", "note"),
+      textElement("p", "journal-invitation__eyebrow", "富永祥玲のnote"),
+      textElement("h3", "journal-invitation__title", "もう少し、ことばの先へ。"),
+      textElement("p", "journal-invitation__text", "これまでの文章やプロフィールは、noteでご覧いただけます。"),
+      link("noteを訪ねる", sources.note.url, "blog-card__link"));
+    return card;
   };
-
-  const renderBlogFeed = (container, posts) => {
-    const limit = Number.parseInt(container.dataset.limit || "3", 10);
-    const visiblePosts = posts.slice(0, Number.isNaN(limit) ? 3 : limit);
-
-    if (!visiblePosts.length) {
-      renderBlogFallback(container);
-      return;
-    }
-
-    container.replaceChildren(...visiblePosts.map((post) => createBlogCard(post)));
+  const fallback = (container, source) => {
+    const el = document.createElement("div");
+    el.className = "blog-fallback";
+    el.append(textElement("p", "", "記事を取得できませんでした。"), link(`${source.name}で最新記事を見る`, source.url, "blog-card__link"));
+    container.replaceChildren(el);
   };
-
-  const initializeBlogFeed = async () => {
+  const loadFeed = async (container) => {
+    const source = sources[container.dataset.blogFeed] || sources.ameblo;
     try {
-      const response = await fetch(BLOG_FEED_URL, { credentials: "same-origin", signal: AbortSignal.timeout(20000) });
+      const response = await fetch(source.endpoint, { credentials: "same-origin", signal: AbortSignal.timeout(20000) });
       if (!response.ok) throw new Error("Feed request failed");
-
-      const feed = await response.json();
-      if (!Array.isArray(feed)) throw new Error("Feed payload is invalid");
-
-      blogFeedContainers.forEach((container) => renderBlogFeed(container, feed));
-    } catch {
-      blogFeedContainers.forEach((container) => renderBlogFallback(container));
-    }
+      const posts = await response.json();
+      if (!Array.isArray(posts) || !posts.length) throw new Error("Empty feed");
+      const limit = Number.parseInt(container.dataset.limit || "3", 10) || 3;
+      container.replaceChildren(...posts.slice(0,limit).map((post,i) => createCard(post, source, i)));
+      if (source === sources.note && posts.length === 2 && limit === 3) container.append(noteInvitation());
+    } catch { fallback(container, source); }
   };
-
-  initializeBlogFeed();
+  blogFeedContainers.forEach(loadFeed);
 }

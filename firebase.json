@@ -40,6 +40,13 @@
           "functionId": "blogFeed",
           "region": "asia-northeast1"
         }
+      },
+      {
+        "source": "/api/note-feed",
+        "function": {
+          "functionId": "noteFeed",
+          "region": "asia-northeast1"
+        }
       }
     ],
     "headers": [

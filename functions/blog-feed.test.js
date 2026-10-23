@@ -80,3 +80,56 @@ test("rejects POST without contacting Ameblo", async () => {
   assert.equal(res.code, 405);
   assert.equal(res.headers.Allow, "GET, HEAD");
 });
+
+const { createNoteFeedHandler } = require("./blog-feed");
+const noteItem = (id, date, extra = "") => `<item>
+  <title>noteの記事</title><link>https://note.com/magic_auklet8531/n/n${id}</link>
+  <pubDate>${date}</pubDate><description><![CDATA[<p>本文 &amp; 気づき</p><a href="https://note.com/">続きをみる</a>]]></description>
+  <note:creatorImage>https://assets.st-note.com/profile.jpg</note:creatorImage>${extra}
+</item>`;
+const noteRss = (items) => `<rss xmlns:note="https://note.com" xmlns:media="http://search.yahoo.com/mrss/"><channel>${items}</channel></rss>`;
+const noteFixture = noteRss(noteItem('123abc', '2026-10-12T01:14:49Z'));
+
+test("note parses CDATA and Japanese dates without treating the avatar as an article image", () => {
+  const [post] = parseBlogFeed(noteFixture, "note");
+  assert.equal(post.link, "https://note.com/magic_auklet8531/n/n123abc");
+  assert.equal(post.date, "2026.10.12");
+  assert.equal(post.excerpt, "本文 & 気づき");
+  assert.equal(post.thumbnail, "");
+});
+
+test("note supports media thumbnail text and attributes; ignores untrusted media", () => {
+  for (const media of ['<media:thumbnail>https://assets.st-note.com/article.jpg</media:thumbnail>', '<media:thumbnail url="https://assets.st-note.com/article.jpg"/>']) {
+    assert.equal(parseBlogFeed(noteRss(noteItem('1', '2026-10-12', media)), "note")[0].thumbnail, "https://assets.st-note.com/article.jpg");
+  }
+  assert.equal(parseBlogFeed(noteRss(noteItem('1', '2026-10-12', '<media:thumbnail>https://evil.example/a.jpg</media:thumbnail>')), "note")[0].thumbnail, "");
+});
+
+test("note sorts, deduplicates and caps at three; excludes other authors", () => {
+  const xml = noteRss([1,4,2,3,4].map(id => noteItem(id, `2026-10-0${id}`)).join('')
+    + noteItem('5', '2026-10-05').replace('/magic_auklet8531/', '/another_author/'));
+  assert.deepEqual(parseBlogFeed(xml, "note").map(p => p.date), ["2026.10.04", "2026.10.03", "2026.10.02"]);
+  assert.throws(() => parseBlogFeed(noteFixture));
+  assert.throws(() => parseBlogFeed(noteFixture.replace('https://note.com/magic_', 'javascript://note.com/magic_'), "note"));
+});
+
+test("note endpoint fetches only its configured RSS and caches successes", async () => {
+  const res = response();
+  await createNoteFeedHandler(async (url) => {
+    assert.equal(url, "https://note.com/magic_auklet8531/rss");
+    return { ok: true, text: async () => noteFixture };
+  })({ method: "GET", query: { url: "https://evil.example" } }, res);
+  assert.equal(res.code, 200);
+  assert.equal(res.body.length, 1);
+  assert.equal(res.headers["Cache-Control"], "public, max-age=0, s-maxage=300");
+});
+
+test("note failures are independent and uncached; write methods never fetch", async () => {
+  const res = response();
+  await createNoteFeedHandler(async () => { throw new Error("timeout"); })({ method: "GET" }, res);
+  assert.equal(res.code, 502);
+  assert.equal(res.headers["Cache-Control"], "no-store");
+  const rejected = response();
+  await createNoteFeedHandler(() => assert.fail("unexpected fetch"))({ method: "POST" }, rejected);
+  assert.equal(rejected.code, 405);
+});

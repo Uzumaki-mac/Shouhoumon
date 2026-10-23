@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ブログ | 富永祥玲の鑑定室</title>
-  <meta name="description" content="富永祥玲の鑑定室のブログページ。日々のお知らせや講座情報を、アメブロ最新記事とあわせてご案内しています。">
+  <meta name="description" content="富永祥玲の鑑定室のブログページ。日々のお知らせや講座情報を、note・アメブロの最新記事とあわせてご案内しています。">
   <link rel="canonical" href="https://sohomon.com/blog.html">
   <meta property="og:title" content="ブログ | 富永祥玲の鑑定室">
-  <meta property="og:description" content="日々のお知らせや講座情報を、アメブロ最新記事とあわせてご案内しています。">
+  <meta property="og:description" content="日々のお知らせや講座情報を、note・アメブロの最新記事とあわせてご案内しています。">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:site_name" content="富永祥玲の鑑定室">
@@ -16,14 +16,15 @@
   <meta property="og:image:alt" content="富永祥玲の鑑定室のイメージ">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ブログ | 富永祥玲の鑑定室">
-  <meta name="twitter:description" content="日々のお知らせや講座情報を、アメブロ最新記事とあわせてご案内しています。">
+  <meta name="twitter:description" content="日々のお知らせや講座情報を、note・アメブロの最新記事とあわせてご案内しています。">
   <meta name="twitter:image" content="https://sohomon.com/assets/images/photos/hero-tarot-candle-wide.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&amp;family=Noto+Serif+JP:wght@400;500;700&amp;display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260426-signature">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261024-note">
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FHW9SX5R7J"></script>
   <script>
@@ -35,7 +36,7 @@
   </script>
 </head>
 
-<body>
+<body class="blog-dual">
   <header class="site-header">
     <div class="site-header__inner">
       <a class="site-logo" href="index.html" aria-label="ト術 奏亨門 ホーム">
@@ -63,28 +64,39 @@
       <div class="page-hero__content reveal">
         <p class="page-hero__eyebrow">BLOG</p>
         <h1 class="page-hero__title">ブログ</h1>
-        <p class="page-hero__lead">日々のお知らせや講座情報をお届けしています。記事の詳細はアメブロにてご覧いただけます。</p>
+        <p class="page-hero__lead">占いのこと、日々の気づき、お知らせ。<br>アメブロとnoteから、最新の文章をお届けします。</p>
       </div>
     </section>
 
-    <section class="section section--cream">
-      <div class="container">
-        <div class="blog-showcase reveal">
+    <section class="section section--cream journal-section">
+      <div class="container journal-stack">
+        <section class="blog-showcase journal-panel journal-panel--ameblo reveal" aria-labelledby="ameblo-title">
           <div class="blog-showcase__head">
             <div class="section-title section-title--left">
-              <p class="section__eyebrow">BLOG</p>
-              <h2 class="section__heading">最新ブログ</h2>
-              <p class="section__lead">日々のお知らせや講座情報をアメブロよりお届けしています。</p>
+              <p class="journal-kicker"><span class="journal-label">Ameblo</span><span>お知らせと、日々の記録</span></p>
+              <h2 class="section__heading" id="ameblo-title">鑑定室からのお便り</h2>
+              <p class="section__lead">講座のご案内や、鑑定室の日々をお届けします。</p>
             </div>
-            <p class="blog-showcase__note">記事詳細はアメブロへ移動します。</p>
+            <a class="journal-all" href="https://ameblo.jp/lily-1410/" target="_blank" rel="noopener noreferrer">アメブロをすべて読む <span aria-hidden="true">↗</span></a>
           </div>
-          <div class="blog-grid" data-blog-feed data-limit="3" aria-live="polite">
-            <p class="blog-fallback">最新記事はアメブロにてご覧いただけます。</p>
+          <div class="blog-grid" data-blog-feed="ameblo" data-limit="3" aria-live="polite">
+            <p class="blog-fallback">最新記事はこちらからもご覧いただけます。<a href="https://ameblo.jp/lily-1410/" target="_blank" rel="noopener noreferrer">アメブロを見る ↗</a></p>
           </div>
-          <div class="blog-showcase__actions">
-            <a class="btn btn--secondary" href="https://ameblo.jp/lily-1410/" target="_blank" rel="noopener noreferrer">アメブロで最新記事を見る</a>
+        </section>
+
+        <section class="blog-showcase journal-panel journal-panel--note reveal" aria-labelledby="note-title">
+          <div class="blog-showcase__head">
+            <div class="section-title section-title--left">
+              <p class="journal-kicker"><span class="journal-label journal-label--note">note</span><span>日々の気づきと、占いのこと</span></p>
+              <h2 class="section__heading" id="note-title">ことばを綴る</h2>
+              <p class="section__lead">日々の想いや、占いを通して見つめたことを。</p>
+            </div>
+            <a class="journal-all" href="https://note.com/magic_auklet8531" target="_blank" rel="noopener noreferrer">noteをすべて読む <span aria-hidden="true">↗</span></a>
           </div>
-        </div>
+          <div class="blog-grid" data-blog-feed="note" data-limit="3" aria-live="polite">
+            <p class="blog-fallback">最新記事はこちらからもご覧いただけます。<a href="https://note.com/magic_auklet8531" target="_blank" rel="noopener noreferrer">noteを見る ↗</a></p>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -156,7 +168,7 @@
   <button class="back-to-top" type="button" aria-label="ページ上部へ戻る">
     <span>TOP</span>
   </button>
-  <script src="assets/js/main.js?v=20261022-blog" defer></script>
+  <script src="assets/js/main.js?v=20261024-note" defer></script>
 </body>
 
 </html>

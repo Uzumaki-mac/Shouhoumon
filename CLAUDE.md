@@ -9,7 +9,7 @@
 ## 技術スタック
 
 - フロントエンド: **HTML / CSS / JavaScript**（ビルドツール・フレームワーク不使用）
-- バックエンド: **Firebase Functions / Node.js 22**（フォーム送信・アメブロ記事取得。PHP不使用）
+- バックエンド: **Firebase Functions / Node.js 22**（フォーム送信・アメブロ／note記事取得。PHP不使用）
 - **Firebase Hosting** でホスティング（プロジェクトID: `shouhoumon-20260424-214632`）
 - **本番ドメイン**: https://sohomon.com
 - **Google Analytics**: G-FHW9SX5R7J（全ページ導入済み）
@@ -28,7 +28,7 @@ firebase deploy --only hosting
 ブログ取得機能を変更した場合は、Functionを先に公開してからHostingを公開する:
 
 ```bash
-firebase deploy --only functions:blogFeed
+firebase deploy --only functions:blogFeed,functions:noteFeed
 firebase deploy --only hosting
 ```
 
@@ -42,19 +42,29 @@ firebase hosting:channel:deploy preview
 
 ---
 
-## アメブロ最新記事の自動表示（2026-10-22更新）
+## アメブロ・noteのRSS自動表示（2026-10-24更新）
 
-- 対象: `index.html` と `blog.html` の最新ブログ欄（3件）
-- ブラウザの `assets/js/main.js` が同一ドメインの `GET /api/blog-feed` を取得
-- `firebase.json` で `blogFeed`（asia-northeast1 / Node.js 22）へ接続
-- `functions/blog-feed.js` が `https://rssblog.ameba.jp/lily-1410/rss20.xml` を取得し、日付の新しい有効な記事3件を返す
-- 日付は日本時間。本文はHTMLを除いた抜粋、画像はアメブロの記事画像を使用
-- 成功レスポンスはFirebase Hostingで5分間キャッシュ。アメブロ側のRSS更新後、サイト側のキャッシュ失効後に新しい記事を取得する
-- ページを開く／再読み込みする際に更新する。開いたままのページの定期再読込は行わない
-- 取得失敗時は古い記事を最新記事として表示せず、アメブロへの案内を表示する
+- `blog.html`: 更新頻度の高いアメブロを上段、noteを下段に配置。デスクトップは各3列でカード寸法・16:9画像を統一。中間幅は2列、スマートフォンは1列
+- アメブロはクリーム色、noteは淡いグリーン。追加CSSは `body.blog-dual` 内に限定
+- `index.html`: 従来どおりアメブロの最新3件のみを表示
+- `assets/js/main.js` が各欄の `data-blog-feed` に応じて個別に取得。片方の失敗で他方を消さない
+
+| 種類 | 同一ドメインのAPI | Function（asia-northeast1 / Node.js 22） | RSS |
+|---|---|---|---|
+| アメブロ | `/api/blog-feed` | `blogFeed` | `https://rssblog.ameba.jp/lily-1410/rss20.xml` |
+| note | `/api/note-feed` | `noteFeed` | `https://note.com/magic_auklet8531/rss` |
+
+- 両Functionは `functions/blog-feed.js` の共通処理を利用。固定のRSSから、著者・記事URLを検証して日付の新しい有効な記事を最大3件返す
+- 日付は日本時間。本文はHTMLを除いた抜粋。RSSの画像は提供元の画像ホストのみ許可
+- noteの `media:thumbnail`（URL属性／テキスト）と本文画像に対応。著者のプロフィール画像は記事画像として扱わない
+- 画像がないnote記事は既存サイトの装飾写真で代替。noteが2件のときは3枠目にプロフィール案内を表示し、3件以上になれば最新3記事へ自動的に切り替える
+- 成功レスポンスはFirebase Hostingで5分間キャッシュ。RSS提供元の更新後、キャッシュ失効後に新しい記事を取得
+- ページを開く／再読み込みする際に更新。開いたままのページの定期再読込は行わない
+- 取得失敗時は未キャッシュの502を返し、画面は対象サービスへの案内リンクを表示。ローカル試作の保存済みRSSによる代替は本番では使わない
 - 定期ジョブ・手動の記事データ更新・PHPは不要
-- `assets/data/ameblo-feed.json` は旧固定データで、現在の画面からは参照しない
-- `CLAUDE.md` と `firestore.rules` はHostingの公開対象から除外する
+- `assets/data/ameblo-feed.json` は旧固定データで、画面からは参照しない
+- `CLAUDE.md` と `firestore.rules` はHosting公開対象外
+- 本番ページにはGoogle Analyticsを維持し、試作の `noindex` を含めない
 
 検証:
 
@@ -63,7 +73,11 @@ npm test --prefix functions
 npm run lint --prefix functions
 ```
 
-テストはRSS解析、日本時間の日付、最新順・重複除去、不正データ、キャッシュ、上流エラー・タイムアウト、HTTPメソッドを確認する。
+12件のテストで両RSSの解析、日本時間の日付、最新順・重複除去、著者制限、画像形式、不正データ、キャッシュ、上流エラー・タイムアウト、HTTPメソッドを確認。
+
+ローカル試作は `/Users/isao/Documents/ChatGPT/Website/note-preview`。試作用Pythonサーバー・比較ページは本番へコピーしない。導入前のGitコミットは `e56c17a`。
+
+2026-10-22に確認した依存ライブラリのセキュリティ更新は別件で未実施。本変更でセキュリティ対策完了と扱わない。
 
 ---
 
