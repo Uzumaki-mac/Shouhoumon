@@ -2416,9 +2416,15 @@ button {
 }
 
 .reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+/* Content stays visible unless JavaScript enables the entrance animation. */
+.reveal.is-pending {
   opacity: 0;
   transform: translateY(26px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal.is-visible {
@@ -2960,7 +2966,8 @@ button {
     animation-iteration-count: 1 !important;
   }
 
-  .reveal {
+  .reveal,
+  .reveal.is-pending {
     opacity: 1;
     transform: none;
   }
@@ -3009,4 +3016,11 @@ button {
   .blog-dual .blog-card__body { padding: 18px; }
   .blog-dual .journal-kicker { gap: 10px; font-size: .68rem; }
   .blog-dual .journal-invitation { min-height: 300px; }
+}
+
+/* Links embedded in explanatory paragraphs. */
+.inline-link {
+  color: var(--color-heading);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
